@@ -9,7 +9,7 @@ import pandas as pd
 import logging
 from selenium.common.exceptions import StaleElementReferenceException
 
-# %%
+# %%s
 # The sleep function can help you to avoid the server 
 # to be overloaded with too many requests in a very short period of time. Basically, with sleep you can make the script stop for a certain period of time so that if you are making some requests iteratively you can avoid the server to be overloaded.
 def sleep():
