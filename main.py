@@ -25,6 +25,7 @@ boton = driver.find_element(By.XPATH,'//*[@id="onetrust-accept-btn-handler"]').c
 # %%
 dataframe1 = pd.DataFrame(data=None)
 data = {}
+dataframeBusines = pd.DataFrame(data=None)
 elements = driver.find_elements(By.CLASS_NAME, 'flex-1')
 for name,url in ingesta.items():
     driver.get(url)
@@ -45,7 +46,17 @@ for name,url in ingesta.items():
     sleep()
     driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]').click()
     driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/div/div[3]/span').click()
+    sleep()
     tablilla = driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[2]/div[3]/table').get_attribute('outerHTML')
     df = pd.read_html(tablilla)[0]
+    df["Nombre"] = (name) * len(df)
+    dataframeBusines = pd.concat([dataframeBusines,df])
+    driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/nav/div[1]/ul/li[3]/ul/li[1]/a').click()
+    driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[4]/div/div[1]/div/button[8]').click()
+    ind_tecnico = driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[4]/div/div[2]/div[2]/div[2]/div/table').get_attribute('outerHTML')
+    df_ind_tecnico_tabla = pd.read_html(ind_tecnico)[0]
+    df_ind_tecnico_tabla["Nombre"] = (name) * len(df)
+    df_ind_tecnico_tabla["Fecha"] = (df['fecha']) * len(df)
+    dataframe_ind_tecnico = pd.concat([dataframe_ind_tecnico,df_ind_tecnico_tabla])
 print(dataframe1)
 # %%
