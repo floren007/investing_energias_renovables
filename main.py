@@ -1,14 +1,10 @@
 # %%
 from selenium import webdriver
-from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import random
 import pandas as pd
-import logging
-from selenium.common.exceptions import StaleElementReferenceException
-
 # %%
 # The sleep function can help you to avoid the server 
 # to be overloaded with too many requests in a very short period of time. Basically, with sleep you can make the script stop for a certain period of time so that if you are making some requests iteratively you can avoid the server to be overloaded.
@@ -44,10 +40,11 @@ for name,url in ingesta.items():
         data[campo] = valor
     datos = pd.DataFrame([data])
     dataframe1 = pd.concat([dataframe1,datos])
-    driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/nav/div[2]/ul/li[2]').click()
+    informacionHistorica = driver.find_element(By.XPATH, "//a[contains(text(), 'Información histórica')]")
+    driver.execute_script("arguments[0].click();",informacionHistorica)
     sleep()
     driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]').click()
-    driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/div/div[3]').click()
+    driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[2]/div[2]/div[1]/div[2]/div/div[3]/span').click()
     tablilla = driver.find_element(By.XPATH,'//*[@id="__next"]/div[2]/div[2]/div[2]/div[1]/div[2]/div[3]/table').get_attribute('outerHTML')
     df = pd.read_html(tablilla)[0]
 print(dataframe1)
